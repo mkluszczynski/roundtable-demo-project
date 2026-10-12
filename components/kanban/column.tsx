@@ -8,13 +8,22 @@ import { cn } from "@/lib/utils"
 
 type ColumnProps = {
   title: string
+  /** Background class for the column header strip, e.g. `bg-nb-yellow`. */
+  accent?: string
   count: number
   onAdd: (title: string, description?: string) => void
   onDropTask: (taskId: string) => void
   children: React.ReactNode
 }
 
-export function Column({ title, count, onAdd, onDropTask, children }: ColumnProps) {
+export function Column({
+  title,
+  accent = "bg-nb-yellow",
+  count,
+  onAdd,
+  onDropTask,
+  children,
+}: ColumnProps) {
   const [adding, setAdding] = useState(false)
   const [newTitle, setNewTitle] = useState("")
   const [newDescription, setNewDescription] = useState("")
@@ -33,7 +42,8 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
         setDragOver(true)
       }}
       onDragLeave={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOver(false)
+        if (!e.currentTarget.contains(e.relatedTarget as Node))
+          setDragOver(false)
       }}
       onDrop={(e) => {
         e.preventDefault()
@@ -43,20 +53,27 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
       }}
       onDropCapture={() => setDragOver(false)}
       className={cn(
-        "flex min-h-64 flex-col gap-3 rounded-xl border bg-muted/40 p-3 transition-colors",
-        dragOver && "border-primary/50 bg-muted"
+        "flex min-h-72 flex-col overflow-hidden rounded-2xl border-2 border-foreground bg-card shadow-brutal transition-colors",
+        dragOver && "border-dashed bg-muted"
       )}
     >
-      <header className="flex items-center justify-between px-1">
-        <h2 className="text-sm font-semibold">{title}</h2>
-        <span className="rounded-full bg-background px-2 text-xs text-muted-foreground">{count}</span>
+      <header
+        className={cn(
+          "flex items-center justify-between border-b-2 border-foreground px-4 py-3 text-primary-foreground",
+          accent
+        )}
+      >
+        <h2 className="text-base font-bold tracking-tight">{title}</h2>
+        <span className="min-w-7 rounded-full border-2 border-foreground bg-card px-2 text-center text-xs font-bold text-card-foreground">
+          {count}
+        </span>
       </header>
 
-      <div className="flex flex-1 flex-col gap-2">{children}</div>
+      <div className="flex flex-1 flex-col gap-3 p-3">{children}</div>
 
       {adding ? (
         <form
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-2 p-3 pt-0"
           onSubmit={(e) => {
             e.preventDefault()
             const trimmed = newTitle.trim()
@@ -71,7 +88,7 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder="Task title"
-            className="rounded-md border bg-background px-2 py-1 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            className="rounded-lg border-2 border-foreground bg-card px-3 py-2 text-sm shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal"
             aria-label="New task title"
           />
           <textarea
@@ -79,11 +96,11 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
             onChange={(e) => setNewDescription(e.target.value)}
             rows={2}
             placeholder="Description (optional)"
-            className="resize-none rounded-md border bg-background px-2 py-1 text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            className="resize-none rounded-lg border-2 border-foreground bg-card px-3 py-2 text-xs shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal"
             aria-label="New task description"
           />
-          <div className="flex justify-end gap-1">
-            <Button type="button" variant="ghost" size="sm" onClick={reset}>
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={reset}>
               Cancel
             </Button>
             <Button type="submit" size="sm" disabled={!newTitle.trim()}>
@@ -92,7 +109,11 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
           </div>
         </form>
       ) : (
-        <Button variant="ghost" className="justify-start" onClick={() => setAdding(true)}>
+        <Button
+          variant="outline"
+          className="mx-3 mb-3 justify-start border-dashed shadow-none hover:border-solid"
+          onClick={() => setAdding(true)}
+        >
           <Plus data-icon="inline-start" />
           Add task
         </Button>
