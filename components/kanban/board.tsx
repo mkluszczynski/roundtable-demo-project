@@ -28,8 +28,8 @@ export function Board() {
             title={column.title}
             accent={COLUMN_ACCENTS[column.id]}
             count={columnTasks.length}
-            onAdd={(title, description) =>
-              addTask(column.id, title, description)
+            onAdd={(title, description, priority) =>
+              addTask(column.id, title, description, priority)
             }
             onDropTask={(taskId) => moveTask(taskId, column.id)}
           >

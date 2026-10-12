@@ -3,8 +3,9 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react"
 
+import { PriorityBadge, PrioritySelect } from "@/components/kanban/priority"
 import { Button } from "@/components/ui/button"
-import type { Task } from "@/lib/kanban/types"
+import type { Priority, Task } from "@/lib/kanban/types"
 import { cn } from "@/lib/utils"
 
 type TaskCardProps = {
@@ -13,7 +14,11 @@ type TaskCardProps = {
   canMoveRight: boolean
   onMoveLeft: () => void
   onMoveRight: () => void
-  onUpdate: (changes: { title: string; description?: string }) => void
+  onUpdate: (changes: {
+    title: string
+    description?: string
+    priority: Priority
+  }) => void
   onDelete: () => void
   onDropBefore: (draggedId: string) => void
 }
@@ -31,18 +36,24 @@ export function TaskCard({
   const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState(task.title)
   const [description, setDescription] = useState(task.description ?? "")
+  const [priority, setPriority] = useState(task.priority)
   const [dragging, setDragging] = useState(false)
 
   function save() {
     const trimmed = title.trim()
     if (!trimmed) return
-    onUpdate({ title: trimmed, description: description.trim() || undefined })
+    onUpdate({
+      title: trimmed,
+      description: description.trim() || undefined,
+      priority,
+    })
     setEditing(false)
   }
 
   function cancel() {
     setTitle(task.title)
     setDescription(task.description ?? "")
+    setPriority(task.priority)
     setEditing(false)
   }
 
@@ -70,6 +81,11 @@ export function TaskCard({
           placeholder="Description (optional)"
           className="resize-none rounded-lg border-2 border-foreground bg-card px-3 py-2 text-xs shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
           aria-label="Task description"
+        />
+        <PrioritySelect
+          value={priority}
+          onChange={setPriority}
+          aria-label="Task priority"
         />
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" size="sm" onClick={cancel}>
@@ -126,6 +142,7 @@ export function TaskCard({
           </Button>
         </div>
       </div>
+      <PriorityBadge priority={task.priority} />
       {task.description && (
         <p className="text-xs whitespace-pre-wrap text-muted-foreground">
           {task.description}

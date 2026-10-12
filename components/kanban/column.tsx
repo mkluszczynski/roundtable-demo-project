@@ -3,7 +3,9 @@
 import { useState } from "react"
 import { Plus } from "lucide-react"
 
+import { PrioritySelect } from "@/components/kanban/priority"
 import { Button } from "@/components/ui/button"
+import { DEFAULT_PRIORITY, type Priority } from "@/lib/kanban/types"
 import { cn } from "@/lib/utils"
 
 type ColumnProps = {
@@ -11,7 +13,11 @@ type ColumnProps = {
   /** Background class for the column header strip, e.g. `bg-nb-yellow`. */
   accent?: string
   count: number
-  onAdd: (title: string, description?: string) => void
+  onAdd: (
+    title: string,
+    description: string | undefined,
+    priority: Priority
+  ) => void
   onDropTask: (taskId: string) => void
   children: React.ReactNode
 }
@@ -27,11 +33,13 @@ export function Column({
   const [adding, setAdding] = useState(false)
   const [newTitle, setNewTitle] = useState("")
   const [newDescription, setNewDescription] = useState("")
+  const [newPriority, setNewPriority] = useState<Priority>(DEFAULT_PRIORITY)
   const [dragOver, setDragOver] = useState(false)
 
   function reset() {
     setNewTitle("")
     setNewDescription("")
+    setNewPriority(DEFAULT_PRIORITY)
     setAdding(false)
   }
 
@@ -78,7 +86,7 @@ export function Column({
             e.preventDefault()
             const trimmed = newTitle.trim()
             if (!trimmed) return
-            onAdd(trimmed, newDescription.trim() || undefined)
+            onAdd(trimmed, newDescription.trim() || undefined, newPriority)
             reset()
           }}
           onKeyDown={(e) => e.key === "Escape" && reset()}
@@ -98,6 +106,11 @@ export function Column({
             placeholder="Description (optional)"
             className="resize-none rounded-lg border-2 border-foreground bg-card px-3 py-2 text-xs shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
             aria-label="New task description"
+          />
+          <PrioritySelect
+            value={newPriority}
+            onChange={setNewPriority}
+            aria-label="New task priority"
           />
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" size="sm" onClick={reset}>
