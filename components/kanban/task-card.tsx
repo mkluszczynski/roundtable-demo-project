@@ -60,7 +60,7 @@ export function TaskCard({
           autoFocus
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="rounded-lg border-2 border-foreground bg-card px-3 py-2 text-sm shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal"
+          className="rounded-lg border-2 border-foreground bg-card px-3 py-2 text-sm shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
           aria-label="Task title"
         />
         <textarea
@@ -68,7 +68,7 @@ export function TaskCard({
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
           placeholder="Description (optional)"
-          className="resize-none rounded-lg border-2 border-foreground bg-card px-3 py-2 text-xs shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal"
+          className="resize-none rounded-lg border-2 border-foreground bg-card px-3 py-2 text-xs shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
           aria-label="Task description"
         />
         <div className="flex justify-end gap-2">

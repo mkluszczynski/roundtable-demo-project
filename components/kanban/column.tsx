@@ -88,7 +88,7 @@ export function Column({
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder="Task title"
-            className="rounded-lg border-2 border-foreground bg-card px-3 py-2 text-sm shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal"
+            className="rounded-lg border-2 border-foreground bg-card px-3 py-2 text-sm shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
             aria-label="New task title"
           />
           <textarea
@@ -96,7 +96,7 @@ export function Column({
             onChange={(e) => setNewDescription(e.target.value)}
             rows={2}
             placeholder="Description (optional)"
-            className="resize-none rounded-lg border-2 border-foreground bg-card px-3 py-2 text-xs shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal"
+            className="resize-none rounded-lg border-2 border-foreground bg-card px-3 py-2 text-xs shadow-brutal-sm transition-shadow outline-none placeholder:text-muted-foreground focus-visible:shadow-brutal focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card"
             aria-label="New task description"
           />
           <div className="flex justify-end gap-2">

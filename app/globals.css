@@ -79,7 +79,7 @@
     --muted-foreground: #5c544d;
     --accent: var(--nb-teal);
     --accent-foreground: #1a1a1a;
-    --destructive: var(--nb-coral);
+    --destructive: #d93636;
     --border: #1a1a1a;
     --input: #1a1a1a;
     --ring: #1a1a1a;
