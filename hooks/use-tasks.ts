@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 
 import { loadTasks, saveTasks } from "@/lib/kanban/storage"
-import type { ColumnId, Task } from "@/lib/kanban/types"
+import { DEFAULT_PRIORITY, type ColumnId, type Priority, type Task } from "@/lib/kanban/types"
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([])
@@ -20,12 +20,13 @@ export function useTasks() {
   }, [tasks, hydrated])
 
   const addTask = useCallback(
-    (status: ColumnId, title: string, description?: string) => {
+    (status: ColumnId, title: string, description?: string, priority: Priority = DEFAULT_PRIORITY) => {
       const task: Task = {
         id: crypto.randomUUID(),
         title,
         description: description || undefined,
         status,
+        priority,
         createdAt: Date.now(),
       }
       setTasks((prev) => [...prev, task])

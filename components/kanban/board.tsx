@@ -20,7 +20,7 @@ export function Board() {
             key={column.id}
             title={column.title}
             count={columnTasks.length}
-            onAdd={(title, description) => addTask(column.id, title, description)}
+            onAdd={(title, description, priority) => addTask(column.id, title, description, priority)}
             onDropTask={(taskId) => moveTask(taskId, column.id)}
           >
             {hydrated &&

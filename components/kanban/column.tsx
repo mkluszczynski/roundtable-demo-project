@@ -3,13 +3,15 @@
 import { useState } from "react"
 import { Plus } from "lucide-react"
 
+import { PrioritySelect } from "@/components/kanban/priority"
 import { Button } from "@/components/ui/button"
+import { DEFAULT_PRIORITY, type Priority } from "@/lib/kanban/types"
 import { cn } from "@/lib/utils"
 
 type ColumnProps = {
   title: string
   count: number
-  onAdd: (title: string, description?: string) => void
+  onAdd: (title: string, description: string | undefined, priority: Priority) => void
   onDropTask: (taskId: string) => void
   children: React.ReactNode
 }
@@ -18,11 +20,13 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
   const [adding, setAdding] = useState(false)
   const [newTitle, setNewTitle] = useState("")
   const [newDescription, setNewDescription] = useState("")
+  const [newPriority, setNewPriority] = useState<Priority>(DEFAULT_PRIORITY)
   const [dragOver, setDragOver] = useState(false)
 
   function reset() {
     setNewTitle("")
     setNewDescription("")
+    setNewPriority(DEFAULT_PRIORITY)
     setAdding(false)
   }
 
@@ -61,7 +65,7 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
             e.preventDefault()
             const trimmed = newTitle.trim()
             if (!trimmed) return
-            onAdd(trimmed, newDescription.trim() || undefined)
+            onAdd(trimmed, newDescription.trim() || undefined, newPriority)
             reset()
           }}
           onKeyDown={(e) => e.key === "Escape" && reset()}
@@ -82,6 +86,7 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
             className="resize-none rounded-md border bg-background px-2 py-1 text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
             aria-label="New task description"
           />
+          <PrioritySelect value={newPriority} onChange={setNewPriority} aria-label="New task priority" />
           <div className="flex justify-end gap-1">
             <Button type="button" variant="ghost" size="sm" onClick={reset}>
               Cancel
