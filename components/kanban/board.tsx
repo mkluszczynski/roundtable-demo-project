@@ -9,7 +9,7 @@ export function Board() {
   const { tasks, hydrated, addTask, updateTask, deleteTask, moveTask } = useTasks()
 
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="grid items-start gap-6 md:grid-cols-3">
       {COLUMNS.map((column, columnIndex) => {
         const columnTasks = tasks.filter((t) => t.status === column.id)
         const prev = COLUMNS[columnIndex - 1]
@@ -18,6 +18,7 @@ export function Board() {
         return (
           <Column
             key={column.id}
+            id={column.id}
             title={column.title}
             count={columnTasks.length}
             onAdd={(title, description, priority) => addTask(column.id, title, description, priority)}

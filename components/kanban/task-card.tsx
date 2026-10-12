@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react"
 
-import { PriorityBadge, PrioritySelect } from "@/components/kanban/priority"
+import { fieldClassName, PriorityBadge, PrioritySelect } from "@/components/kanban/priority"
 import { Button } from "@/components/ui/button"
 import type { Priority, Task } from "@/lib/kanban/types"
 import { cn } from "@/lib/utils"
@@ -52,7 +52,7 @@ export function TaskCard({
   if (editing) {
     return (
       <form
-        className="flex flex-col gap-2 rounded-lg border bg-card p-3 shadow-sm"
+        className="flex flex-col gap-2.5 rounded-xl border-2 border-foreground bg-card p-3 shadow-brutal"
         onSubmit={(e) => {
           e.preventDefault()
           save()
@@ -63,7 +63,7 @@ export function TaskCard({
           autoFocus
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="rounded-md border bg-background px-2 py-1 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+          className={cn(fieldClassName, "text-sm")}
           aria-label="Task title"
         />
         <textarea
@@ -71,12 +71,12 @@ export function TaskCard({
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
           placeholder="Description (optional)"
-          className="resize-none rounded-md border bg-background px-2 py-1 text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+          className={cn(fieldClassName, "resize-none text-xs")}
           aria-label="Task description"
         />
         <PrioritySelect value={priority} onChange={setPriority} aria-label="Task priority" />
-        <div className="flex justify-end gap-1">
-          <Button type="button" variant="ghost" size="sm" onClick={cancel}>
+        <div className="flex justify-end gap-2">
+          <Button type="button" variant="outline" size="sm" onClick={cancel}>
             Cancel
           </Button>
           <Button type="submit" size="sm" disabled={!title.trim()}>
@@ -104,17 +104,17 @@ export function TaskCard({
         if (draggedId) onDropBefore(draggedId)
       }}
       className={cn(
-        "group flex cursor-grab flex-col gap-1 rounded-lg border bg-card p-3 shadow-sm transition-opacity active:cursor-grabbing",
-        dragging && "opacity-40"
+        "group flex cursor-grab flex-col gap-2 rounded-xl border-2 border-foreground bg-card p-3 shadow-brutal-sm transition-all hover:-translate-x-px hover:-translate-y-px hover:shadow-brutal active:cursor-grabbing",
+        dragging && "rotate-2 opacity-40"
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-sm font-medium break-words">{task.title}</p>
-        <div className="flex shrink-0 gap-0.5 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
-          <Button variant="ghost" size="icon-xs" onClick={() => setEditing(true)} aria-label="Edit task">
+        <p className="text-sm font-bold break-words">{task.title}</p>
+        <div className="flex shrink-0 gap-1.5 transition-opacity focus-within:opacity-100 md:opacity-0 md:group-hover:opacity-100">
+          <Button variant="warning" size="icon-xs" onClick={() => setEditing(true)} aria-label="Edit task">
             <Pencil />
           </Button>
-          <Button variant="ghost" size="icon-xs" onClick={onDelete} aria-label="Delete task">
+          <Button variant="destructive" size="icon-xs" onClick={onDelete} aria-label="Delete task">
             <Trash2 />
           </Button>
         </div>
@@ -125,7 +125,7 @@ export function TaskCard({
       )}
       <div className="mt-1 flex justify-between">
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon-xs"
           onClick={onMoveLeft}
           disabled={!canMoveLeft}
@@ -134,7 +134,7 @@ export function TaskCard({
           <ChevronLeft />
         </Button>
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon-xs"
           onClick={onMoveRight}
           disabled={!canMoveRight}

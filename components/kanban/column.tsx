@@ -3,12 +3,19 @@
 import { useState } from "react"
 import { Plus } from "lucide-react"
 
-import { PrioritySelect } from "@/components/kanban/priority"
+import { fieldClassName, PrioritySelect } from "@/components/kanban/priority"
 import { Button } from "@/components/ui/button"
-import { DEFAULT_PRIORITY, type Priority } from "@/lib/kanban/types"
+import { DEFAULT_PRIORITY, type ColumnId, type Priority } from "@/lib/kanban/types"
 import { cn } from "@/lib/utils"
 
+const COLUMN_ACCENTS: Record<ColumnId, string> = {
+  todo: "bg-nb-yellow",
+  "in-progress": "bg-nb-violet",
+  done: "bg-nb-teal",
+}
+
 type ColumnProps = {
+  id: ColumnId
   title: string
   count: number
   onAdd: (title: string, description: string | undefined, priority: Priority) => void
@@ -16,7 +23,7 @@ type ColumnProps = {
   children: React.ReactNode
 }
 
-export function Column({ title, count, onAdd, onDropTask, children }: ColumnProps) {
+export function Column({ id, title, count, onAdd, onDropTask, children }: ColumnProps) {
   const [adding, setAdding] = useState(false)
   const [newTitle, setNewTitle] = useState("")
   const [newDescription, setNewDescription] = useState("")
@@ -47,20 +54,27 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
       }}
       onDropCapture={() => setDragOver(false)}
       className={cn(
-        "flex min-h-64 flex-col gap-3 rounded-xl border bg-muted/40 p-3 transition-colors",
-        dragOver && "border-primary/50 bg-muted"
+        "flex min-h-72 flex-col overflow-hidden rounded-2xl border-2 border-foreground bg-card shadow-brutal transition-all",
+        dragOver && "-translate-x-0.5 -translate-y-0.5 border-dashed bg-muted shadow-brutal-lg"
       )}
     >
-      <header className="flex items-center justify-between px-1">
-        <h2 className="text-sm font-semibold">{title}</h2>
-        <span className="rounded-full bg-background px-2 text-xs text-muted-foreground">{count}</span>
+      <header
+        className={cn(
+          "flex items-center justify-between border-b-2 border-foreground px-4 py-3 text-nb-ink",
+          COLUMN_ACCENTS[id]
+        )}
+      >
+        <h2 className="text-base font-bold tracking-tight">{title}</h2>
+        <span className="min-w-7 rounded-full border-2 border-nb-ink bg-white px-2 text-center text-xs font-bold">
+          {count}
+        </span>
       </header>
 
-      <div className="flex flex-1 flex-col gap-2">{children}</div>
+      <div className="flex flex-1 flex-col gap-3 p-3">{children}</div>
 
       {adding ? (
         <form
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-2.5 px-3 pb-3"
           onSubmit={(e) => {
             e.preventDefault()
             const trimmed = newTitle.trim()
@@ -75,7 +89,7 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder="Task title"
-            className="rounded-md border bg-background px-2 py-1 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            className={cn(fieldClassName, "text-sm")}
             aria-label="New task title"
           />
           <textarea
@@ -83,12 +97,12 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
             onChange={(e) => setNewDescription(e.target.value)}
             rows={2}
             placeholder="Description (optional)"
-            className="resize-none rounded-md border bg-background px-2 py-1 text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            className={cn(fieldClassName, "resize-none text-xs")}
             aria-label="New task description"
           />
           <PrioritySelect value={newPriority} onChange={setNewPriority} aria-label="New task priority" />
-          <div className="flex justify-end gap-1">
-            <Button type="button" variant="ghost" size="sm" onClick={reset}>
+          <div className="flex justify-end gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={reset}>
               Cancel
             </Button>
             <Button type="submit" size="sm" disabled={!newTitle.trim()}>
@@ -97,10 +111,12 @@ export function Column({ title, count, onAdd, onDropTask, children }: ColumnProp
           </div>
         </form>
       ) : (
-        <Button variant="ghost" className="justify-start" onClick={() => setAdding(true)}>
-          <Plus data-icon="inline-start" />
-          Add task
-        </Button>
+        <div className="px-3 pb-3">
+          <Button variant="outline" className="w-full" onClick={() => setAdding(true)}>
+            <Plus data-icon="inline-start" />
+            Add task
+          </Button>
+        </div>
       )}
     </section>
   )
