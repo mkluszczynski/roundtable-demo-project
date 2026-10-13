@@ -1,6 +1,7 @@
 import { Sparkles, Star } from "lucide-react"
 
 import { Board } from "@/components/kanban/board"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const SWATCHES = [
   "bg-nb-red",
@@ -59,6 +60,7 @@ export default function Page() {
                 Bold tasks · Hard shadows · Done right
               </p>
             </div>
+            <ThemeToggle className="ml-auto self-start" />
           </div>
 
           <ul className="flex flex-wrap gap-2 text-xs font-semibold text-nb-ink">
